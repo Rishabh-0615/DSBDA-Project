@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Model Evaluation & Metrics{% endblock %}
+
+{% block content %}
+{% if not metrics %}
+<div class="alert alert-warning">
+    Model metrics are not available yet. Upload a valid dataset to trigger training.
+</div>
+{% else %}
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="kpi-card p-4 bg-primary text-white">
+            <h6 class="text-white-50 mb-2 text-uppercase fw-bold">R² Score</h6>
+            <h2 class="mb-0 fw-bold">{{ "%.4f"|format(metrics.r2_score) }}</h2>
+            <i class="fas fa-percentage kpi-icon text-white"></i>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="kpi-card p-4 bg-info text-white">
+            <h6 class="text-white-50 mb-2 text-uppercase fw-bold">Mean Absolute Error (MAE)</h6>
+            <h2 class="mb-0 fw-bold">₹{{ "%.4f"|format(metrics.mae) }}</h2>
+            <i class="fas fa-exclamation-triangle kpi-icon text-white"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Primary Evaluation Metrics</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>RMSE</span>
+                    <strong>{{ "%.4f"|format(metrics.rmse) }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>MSE</span>
+                    <strong>{{ "%.4f"|format(metrics.mse) }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>MAPE</span>
+                    <strong>{{ "%.2f"|format(metrics.mape) }}%</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Best Model</span>
+                    <strong>{{ best_model }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Train/Test Rows</span>
+                    <strong>{{ train_rows }} / {{ test_rows }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Trained At (UTC)</span>
+                    <strong>{{ trained_at }}</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Model Leaderboard (Lower RMSE is Better)</h5>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>RMSE</th>
+                            <th>MAE</th>
+                            <th>R²</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for model_name, model_metrics in leaderboard.items() %}
+                        <tr>
+                            <td>{{ model_name }}</td>
+                            <td>{{ "%.4f"|format(model_metrics.rmse) }}</td>
+                            <td>{{ "%.4f"|format(model_metrics.mae) }}</td>
+                            <td>{{ "%.4f"|format(model_metrics.r2_score) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

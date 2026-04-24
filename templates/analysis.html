@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Advanced Sales Analysis{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Filters</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Region</label>
+                    <select class="form-select" id="analysisRegionFilter">
+                        <option value="all">All Regions</option>
+                        {% for region in filter_options.regions %}
+                        <option value="{{ region }}">{{ region }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="analysisCategoryFilter">
+                        <option value="all">All Categories</option>
+                        {% for category in filter_options.categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Start Month</label>
+                    <input type="month" class="form-control" id="analysisStartMonth">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">End Month</label>
+                    <input type="month" class="form-control" id="analysisEndMonth">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" id="analysisApplyFilters"><i class="fas fa-filter me-2"></i> Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Detailed Monthly Trend</h5>
+            <div style="position: relative; height: 300px;">
+                <canvas id="analysisMonthlyTrend"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Regional Distribution</h5>
+            <div style="position: relative; height: 300px;">
+                <canvas id="analysisRegionChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Category Breakdown</h5>
+            <div style="position: relative; height: 300px;">
+                <canvas id="analysisCategoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

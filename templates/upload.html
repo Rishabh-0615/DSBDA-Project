@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Upload Dataset{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4 text-center">Import SuperStore Data</h5>
+            <p class="text-muted text-center mb-4">Upload your superstore.csv file to update the dashboard analytics.</p>
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            
+            <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                <div class="upload-zone mb-4" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="mb-2">Click or drag file here</h5>
+                    <p class="text-muted mb-0">Supports .csv (Max 16MB)</p>
+                    <input type="file" name="file" id="fileInput" class="d-none" accept=".csv" required onchange="document.getElementById('fileName').innerText = this.files[0].name;">
+                </div>
+                <div class="text-center mb-3 text-primary fw-bold" id="fileName"></div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-upload me-2"></i> Process Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

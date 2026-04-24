@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperStore Analytics</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right text-white" id="sidebar-wrapper">
+            <div class="sidebar-heading p-4">
+                <i class="fas fa-chart-line me-2 text-info"></i> SuperStore BI
+            </div>
+            <div class="list-group list-group-flush bg-dark custom-sidebar">
+                <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 {{ 'active-link' if request.endpoint == 'dashboard' else '' }}">
+                    <i class="fas fa-tachometer-alt me-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('upload') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 {{ 'active-link' if request.endpoint == 'upload' else '' }}">
+                    <i class="fas fa-cloud-upload-alt me-3"></i> Upload Dataset
+                </a>
+                <a href="{{ url_for('analysis') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 {{ 'active-link' if request.endpoint == 'analysis' else '' }}">
+                    <i class="fas fa-chart-bar me-3"></i> Sales Analysis
+                </a>
+                <a href="{{ url_for('prediction') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 {{ 'active-link' if request.endpoint == 'prediction' else '' }}">
+                    <i class="fas fa-robot me-3"></i> Sales Prediction
+                </a>
+                <a href="{{ url_for('model_metrics') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 {{ 'active-link' if request.endpoint == 'model_metrics' else '' }}">
+                    <i class="fas fa-cogs me-3"></i> Model Metrics
+                </a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" class="w-100 bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3 px-4 shadow-sm">
+                <div class="container-fluid">
+                    <h4 class="mb-0 text-dark fw-bold">{% block page_title %}{% endblock %}</h4>
+                    <div class="ms-auto d-flex align-items-center">
+                        <button class="btn btn-outline-secondary rounded-circle me-3" id="themeToggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" class="rounded-circle" width="40" alt="User">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid content-container p-4">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script>
+        // Simple dark mode toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+    </script>
+</body>
+</html>

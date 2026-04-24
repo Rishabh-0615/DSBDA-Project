@@ -1,0 +1,55 @@
+{
+  "trained_at": "2026-04-24T14:20:31+00:00",
+  "best_model": "LinearRegression",
+  "metrics": {
+    "mae": 244.3342431515723,
+    "mse": 551061.9194827032,
+    "rmse": 742.3354494315244,
+    "r2_score": 0.1755504445866356,
+    "mape": 468.00517607557293
+  },
+  "model_leaderboard": {
+    "LinearRegression": {
+      "mae": 244.3342431515723,
+      "mse": 551061.9194827032,
+      "rmse": 742.3354494315244,
+      "r2_score": 0.1755504445866356,
+      "mape": 468.00517607557293
+    },
+    "RandomForestRegressor": {
+      "mae": 252.83698019799982,
+      "mse": 612469.8677074761,
+      "rmse": 782.6045410726136,
+      "r2_score": 0.08367736495107203,
+      "mape": 426.8720191253962
+    },
+    "GradientBoostingRegressor": {
+      "mae": 239.15946691215194,
+      "mse": 565820.9962632711,
+      "rmse": 752.2107392634534,
+      "r2_score": 0.15346923400058488,
+      "mape": 479.8893452873252
+    }
+  },
+  "train_rows": 7840,
+  "test_rows": 1960,
+  "features": [
+    "region",
+    "category",
+    "sub_category",
+    "segment",
+    "ship_mode",
+    "state",
+    "order_month",
+    "order_year",
+    "ship_lag_days"
+  ],
+  "prediction_defaults": {
+    "region": "West",
+    "category": "Office Supplies",
+    "sub_category": "Binders",
+    "segment": "Consumer",
+    "ship_mode": "Standard Class",
+    "state": "California"
+  }
+}

@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Sales Prediction Engine{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h5 class="fw-bold mb-4">Input Parameters</h5>
+            {% if model_error %}
+            <div class="alert alert-danger">{{ model_error }}</div>
+            {% endif %}
+            <form id="predictionForm">
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Region</label>
+                    <select class="form-select" id="regionInput" required>
+                        {% for item in options.regions %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Category</label>
+                    <select class="form-select" id="categoryInput" required>
+                        {% for item in options.categories %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Sub-Category</label>
+                    <select class="form-select" id="subCategoryInput" required>
+                        {% for item in options.sub_categories %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Segment</label>
+                    <select class="form-select" id="segmentInput" required>
+                        {% for item in options.segments %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Ship Mode</label>
+                    <select class="form-select" id="shipModeInput" required>
+                        {% for item in options.ship_modes %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">State</label>
+                    <select class="form-select" id="stateInput" required>
+                        {% for item in options.states %}
+                        <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-bold">Order Date</label>
+                    <input type="date" class="form-control" id="orderDateInput" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label text-muted fw-bold">Ship Date</label>
+                    <input type="date" class="form-control" id="shipDateInput" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg w-100"><i class="fas fa-magic me-2"></i> Generate Prediction</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="kpi-card p-5 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+            <h5 class="text-muted text-uppercase fw-bold mb-4">Predicted Sales Result</h5>
+            <div id="predictionResult" style="display: none;">
+                <h1 class="display-3 fw-bold text-success mb-3" id="predictedValue">₹0.00</h1>
+                <p class="text-muted">Estimated sales amount based on encoded business context</p>
+                <div class="mt-4 pt-4 border-top">
+                    <button class="btn btn-outline-primary" onclick="window.print()"><i class="fas fa-download me-2"></i> Export Report</button>
+                </div>
+            </div>
+            <div id="predictionPlaceholder">
+                <i class="fas fa-chart-line fa-4x text-muted mb-3 opacity-25"></i>
+                <p class="text-muted">Fill out the form and click Predict to see results</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const today = new Date();
+const todayIso = today.toISOString().split('T')[0];
+document.getElementById('orderDateInput').value = todayIso;
+document.getElementById('shipDateInput').value = todayIso;
+
+document.getElementById('predictionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const region = document.getElementById('regionInput').value;
+    const category = document.getElementById('categoryInput').value;
+    const subCategory = document.getElementById('subCategoryInput').value;
+    const segment = document.getElementById('segmentInput').value;
+    const shipMode = document.getElementById('shipModeInput').value;
+    const state = document.getElementById('stateInput').value;
+    const orderDate = document.getElementById('orderDateInput').value;
+    const shipDate = document.getElementById('shipDateInput').value;
+
+    if(new Date(shipDate) < new Date(orderDate)) {
+        alert('Ship date cannot be earlier than order date.');
+        return;
+    }
+
+    fetch('/predict_sales', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            region: region,
+            category: category,
+            sub_category: subCategory,
+            segment: segment,
+            ship_mode: shipMode,
+            state: state,
+            order_date: orderDate,
+            ship_date: shipDate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.error) {
+            alert(data.error);
+            return;
+        }
+
+        document.getElementById('predictionPlaceholder').style.display = 'none';
+        document.getElementById('predictionResult').style.display = 'block';
+        document.getElementById('predictedValue').innerText = '₹' + parseFloat(data.predicted_sales).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert("An error occurred during prediction.");
+    });
+});
+</script>
+{% endblock %}
