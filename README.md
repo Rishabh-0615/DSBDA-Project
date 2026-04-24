@@ -108,7 +108,7 @@ http://localhost:5000/
 3. Use these settings:
    - Environment: Python
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
+   - Start Command: `gunicorn app:app --bind 0.0.0.0:$PORT`
 4. Render will use `render.yaml` and `Procfile` if present.
 5. After deploy, open the live URL and upload `data/superstore.csv` if the dashboard starts empty.
 
