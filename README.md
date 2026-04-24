@@ -101,3 +101,19 @@ http://localhost:5000/
 1. /api/chart-data: Dashboard/analysis chart payloads.
 2. /predict_sales: Live prediction endpoint.
 3. /api/model-info: Model metadata JSON.
+
+## Deploy On Render
+1. Push this repo to GitHub.
+2. In Render, create a new Web Service and connect the GitHub repository.
+3. Use these settings:
+   - Environment: Python
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
+4. Render will use `render.yaml` and `Procfile` if present.
+5. After deploy, open the live URL and upload `data/superstore.csv` if the dashboard starts empty.
+
+## Local Test Before Deploy
+1. Run `python app.py` locally.
+2. Open `http://localhost:5000/`.
+3. Upload the dataset.
+4. Verify dashboard, analysis, prediction, and model metrics pages.
